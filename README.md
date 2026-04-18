@@ -12,9 +12,11 @@ This field guide is for designers who want to work with AI design tools the way 
 
 ---
 
-## The Eames Test
+## Five questions in the Eames tradition
 
-Run this before you open any design tool. Five questions. Ten minutes.
+Run these before you open any design tool. Five questions. Ten minutes.
+
+The Eames never wrote these down as a checklist — but they are drawn directly from how the Eames worked, and from their definition of design as "a plan for arranging elements to accomplish a particular purpose." The questions are ours. The philosophy is theirs.
 
 | # | Question | Why it matters |
 |---|----------|----------------|
@@ -40,7 +42,7 @@ The thinking that happens here is the design.
 05. Define success in human behaviour, not aesthetics.
 06. Ask: who is NOT the audience?
 07. Read your brand guide before your first prompt, not after.
-08. Run the Eames Test.
+08. Run the five questions.
 
 ---
 
