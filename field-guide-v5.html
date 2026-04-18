@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Work With AI Design Tools — A Designer's Field Guide by MC Dean</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap');
+
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --cream: #F4EFE2;
+  --orange: #E8481C;
+  --pink: #D9197A;
+  --black: #1A1A1A;
+  --white: #FDFAF3;
+  --muted: #888;
+  --rule: #D4CCBC;
+  --border: 2px solid var(--black);
+  --dot-sm: 10px;
+  --dot-gap-sm: 18px;
+  --dot-md: 14px;
+  --dot-gap-md: 24px;
+}
+
+/* ─────────────────────────────────────────
+   RESET
+───────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+img, svg { max-width: 100%; display: block; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--cream);
+  color: var(--black);
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────
+   DOT PATTERNS
+───────────────────────────────────────── */
+.dots-black {
+  background-color: var(--black);
+  background-image: radial-gradient(circle, var(--cream) var(--dot-sm), transparent var(--dot-sm));
+  background-size: var(--dot-gap-sm) var(--dot-gap-sm);
+}
+.dots-orange {
+  background-color: var(--orange);
+  background-image: radial-gradient(circle, var(--cream) var(--dot-sm), transparent var(--dot-sm));
+  background-size: var(--dot-gap-sm) var(--dot-gap-sm);
+}
+.dots-pink {
+  background-color: var(--pink);
+  background-image: radial-gradient(circle, var(--cream) var(--dot-sm), transparent var(--dot-sm));
+  background-size: var(--dot-gap-sm) var(--dot-gap-sm);
+}
+
+/* ─────────────────────────────────────────
+   MASTHEAD — MOBILE FIRST
+───────────────────────────────────────── */
+.masthead {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  border-bottom: var(--border);
+}
+
+/* title: full width top */
+.cell-title {
+  grid-column: 1 / 3;
+  grid-row: 1;
+  background: var(--cream);
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-bottom: var(--border);
+  min-height: 160px;
+}
+
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+
+.cell-title h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 12vw, 72px);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: var(--black);
+}
+.cell-title h1 span { color: var(--orange); }
+
+/* quote: left bottom */
+.cell-quote {
+  grid-column: 1;
+  grid-row: 2;
+  background: var(--orange);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  border-right: var(--border);
+  min-height: 120px;
+}
+.cell-quote blockquote {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(13px, 3.5vw, 18px);
+  line-height: 1.2;
+  color: var(--cream);
+  letter-spacing: 0.03em;
+}
+.cell-quote cite {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(244,239,226,0.65);
+  font-style: normal;
+}
+
+/* number: right bottom */
+.cell-num {
+  grid-column: 2;
+  grid-row: 2;
+  background: var(--pink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 16px;
+}
+.big-n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 16vw, 100px);
+  line-height: 0.85;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+}
+.big-n-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(244,239,226,0.55);
+  margin-top: 4px;
+}
+
+/* byline: hidden on mobile, shown on tablet+ */
+.cell-byline {
+  display: none;
+  background: var(--black);
+  padding: 20px;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+}
+.cell-byline p {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244,239,226,0.45);
+  line-height: 1.8;
+}
+.cell-byline a { color: rgba(244,239,226,0.75); text-decoration: none; }
+
+/* dot cells: hidden on mobile */
+.cell-dot-1, .cell-dot-2 { display: none; }
+
+/* ─────────────────────────────────────────
+   THESIS — MOBILE
+───────────────────────────────────────── */
+.thesis-strip {
+  display: flex;
+  flex-direction: column;
+  border-bottom: var(--border);
+}
+.thesis-main {
+  padding: 28px 20px;
+  border-bottom: var(--border);
+}
+.thesis-main p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: 300;
+  line-height: 1.55;
+}
+.thesis-aside {
+  padding: 24px 20px;
+}
+.thesis-aside p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  border-left: 3px solid var(--orange);
+  padding-left: 14px;
+}
+
+/* ─────────────────────────────────────────
+   EAMES SECTION — MOBILE
+───────────────────────────────────────── */
+.eames-section { border-bottom: var(--border); }
+
+.eames-header-row {
+  display: flex;
+  flex-direction: column;
+  border-bottom: var(--border);
+}
+.eames-tag {
+  background: var(--black);
+  padding: 12px 20px;
+  border-bottom: var(--border);
+}
+.eames-tag span {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.eames-head-text {
+  padding: 16px 20px;
+}
+.eames-head-text h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(28px, 7vw, 42px);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+.eames-head-text p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Cards: 1 column mobile */
+.eames-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.eames-card {
+  border-bottom: var(--border);
+}
+.eames-card:last-child { border-bottom: none; }
+
+.card-swatch { height: 6px; }
+.ec1 .card-swatch { background: var(--orange); }
+.ec2 .card-swatch { background: var(--black); }
+.ec3 .card-swatch { background: var(--pink); }
+.ec4 .card-swatch { background: var(--orange); }
+.ec5 .card-swatch { background: var(--black); }
+
+.eames-card-inner {
+  padding: 16px 20px 20px;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.card-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  line-height: 0.9;
+  color: var(--rule);
+  display: block;
+  padding-top: 2px;
+}
+.card-q {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+.card-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ─────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────── */
+.nav-bar {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: var(--border);
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--cream);
+}
+.nav-bar::-webkit-scrollbar { display: none; }
+
+.nav-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border-right: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.nav-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 14px;
+  border: none;
+  border-right: 1px solid var(--rule);
+  background: transparent;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+  min-height: 44px;
+}
+.nav-btn:hover { background: var(--black); color: var(--cream); }
+.nav-btn.active { background: var(--orange); color: var(--cream); }
+
+/* ─────────────────────────────────────────
+   CLUSTERS
+───────────────────────────────────────── */
+.clusters-wrap { padding-bottom: 60px; }
+
+.cluster { display: none; border-bottom: var(--border); }
+.cluster.visible {
+  display: block;
+  animation: fadeup 0.18s ease;
+}
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* cluster header */
+.cluster-header {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  border-bottom: var(--border);
+  min-height: 80px;
+}
+.cluster-color-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: var(--border);
+}
+.c1 .cluster-color-block { background: var(--orange); }
+.c2 .cluster-color-block { background: var(--black); }
+.c3 .cluster-color-block { background: var(--pink); }
+.c4 .cluster-color-block.dots-black { }
+.c5 .cluster-color-block { background: var(--orange); }
+
+.cluster-big-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1;
+}
+.c2 .cluster-big-num { color: rgba(244,239,226,0.2); }
+.c4 .cluster-big-num { color: rgba(244,239,226,0.3); }
+
+.cluster-head-text {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cluster-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.cluster-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(22px, 5vw, 34px);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--black);
+  margin-bottom: 3px;
+}
+.cluster-desc {
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ─────────────────────────────────────────
+   WAYS
+───────────────────────────────────────── */
+.ways-list { list-style: none; }
+
+.way {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background 0.08s;
+  -webkit-tap-highlight-color: transparent;
+}
+.way:last-child { border-bottom: none; }
+.way:hover, .way:focus-within { background: #EDE7D5; }
+.way.open { background: #EDE7D5; }
+
+.way-num-col {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px 0;
+  border-right: 1px solid var(--rule);
+  min-height: 52px;
+}
+.way-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--rule);
+  transition: color 0.12s;
+}
+.way:hover .way-num,
+.way.open .way-num { color: var(--orange); }
+.c2 .way:hover .way-num,
+.c2 .way.open .way-num { color: var(--pink); }
+.c3 .way:hover .way-num,
+.c3 .way.open .way-num { color: var(--pink); }
+
+.way-content { padding: 16px 16px 16px 16px; }
+
+.way-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--black);
+}
+.way-body {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.65;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.28s ease, opacity 0.22s ease, margin 0.22s ease;
+}
+.way.open .way-body {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 8px;
+}
+
+/* ─────────────────────────────────────────
+   FOOTER — MOBILE
+───────────────────────────────────────── */
+.site-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: var(--border);
+}
+.footer-cell-main {
+  grid-column: 1 / 3;
+  background: var(--black);
+  padding: 28px 20px;
+  border-bottom: var(--border);
+}
+.footer-cell-main p {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(244,239,226,0.45);
+  line-height: 1.8;
+}
+.footer-cell-main a {
+  color: rgba(244,239,226,0.7);
+  text-decoration: none;
+}
+.footer-cell-dots { display: none; }
+.footer-cell-mit {
+  grid-column: 1 / 3;
+  background: var(--orange);
+  padding: 24px 20px;
+  display: flex;
+  align-items: flex-end;
+}
+.footer-cell-mit span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.05em;
+  color: rgba(244,239,226,0.85);
+  line-height: 1;
+}
+
+/* ─────────────────────────────────────────
+   TABLET: 520px+
+───────────────────────────────────────── */
+@media (min-width: 520px) {
+  .eames-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+  .eames-card:nth-child(odd) { border-right: var(--border); }
+  .eames-card:nth-child(5) { grid-column: 1 / 3; border-right: none; }
+
+  .cluster-header { grid-template-columns: 72px 1fr; }
+  .cluster-big-num { font-size: 52px; }
+  .cluster-title { font-size: 28px; }
+
+  .way-num-col { padding: 18px 0; }
+  .way-content { padding: 18px 20px; }
+  .way-title { font-size: 14px; }
+  .way-body { font-size: 13px; }
+
+  .footer-cell-mit { grid-column: auto; }
+  .footer-cell-dots {
+    display: block;
+    border-left: var(--border);
+  }
+}
+
+/* ─────────────────────────────────────────
+   MEDIUM: 768px+
+───────────────────────────────────────── */
+@media (min-width: 768px) {
+
+  /* masthead: 3-column layout */
+  .masthead {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 200px 160px;
+  }
+  .cell-title {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 28px 32px;
+    min-height: auto;
+    border-right: var(--border);
+  }
+  .cell-dot-1 {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    border-right: var(--border);
+    border-bottom: var(--border);
+  }
+  .cell-num {
+    grid-column: 3;
+    grid-row: 1;
+    border-bottom: var(--border);
+    min-height: auto;
+  }
+  .cell-quote {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: auto;
+  }
+  .cell-dot-2 {
+    display: flex;
+    grid-column: 2;
+    grid-row: 2;
+    border-right: var(--border);
+    border-left: none;
+  }
+  .cell-byline {
+    display: flex;
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  /* thesis */
+  .thesis-strip { flex-direction: row; }
+  .thesis-main {
+    flex: 1;
+    padding: 40px 36px;
+    border-bottom: none;
+    border-right: var(--border);
+  }
+  .thesis-aside {
+    flex: 1;
+    padding: 40px 36px;
+  }
+
+  /* eames section */
+  .eames-header-row { flex-direction: row; align-items: center; }
+  .eames-tag { border-bottom: none; border-right: var(--border); padding: 16px 24px; }
+  .eames-head-text { padding: 16px 24px; }
+
+  /* eames cards: 5 columns */
+  .eames-cards { grid-template-columns: repeat(5, 1fr); }
+  .eames-card { border-right: var(--border); border-bottom: none; }
+  .eames-card:nth-child(odd) { border-right: var(--border); }
+  .eames-card:nth-child(5) { grid-column: auto; border-right: none; }
+  .eames-card-inner { grid-template-columns: 1fr; gap: 0; }
+  .card-num { font-size: 48px; margin-bottom: 12px; }
+
+  /* clusters */
+  .cluster-header { grid-template-columns: 80px 1fr; }
+  .cluster-big-num { font-size: 60px; }
+
+  /* ways */
+  .way { grid-template-columns: 64px 1fr; }
+  .way-num { font-size: 32px; }
+  .way-title { font-size: 14px; }
+  .way-body { font-size: 13px; }
+
+  /* footer */
+  .site-footer { grid-template-columns: 1fr 1fr 1fr; }
+  .footer-cell-main {
+    grid-column: 1 / 3;
+    border-bottom: none;
+    border-right: var(--border);
+    padding: 32px 28px;
+  }
+  .footer-cell-dots {
+    display: block;
+    grid-column: auto;
+    border-left: none;
+  }
+  .footer-cell-mit {
+    grid-column: auto;
+    border-left: var(--border);
+    padding: 32px 24px;
+  }
+
+  /* nav */
+  .nav-label { padding: 0 20px; font-size: 9px; }
+  .nav-btn { padding: 16px 18px; font-size: 9px; }
+
+  /* dots: larger on wider screens */
+  .dots-black, .dots-orange, .dots-pink {
+    background-size: var(--dot-gap-md) var(--dot-gap-md);
+    background-image: radial-gradient(circle, var(--cream) var(--dot-md), transparent var(--dot-md));
+  }
+  .dots-orange {
+    background-image: radial-gradient(circle, var(--cream) var(--dot-md), transparent var(--dot-md));
+  }
+  .dots-pink {
+    background-image: radial-gradient(circle, var(--cream) var(--dot-md), transparent var(--dot-md));
+  }
+}
+
+/* ─────────────────────────────────────────
+   DESKTOP: 1024px+
+───────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .masthead {
+    grid-template-rows: 220px 180px;
+  }
+  .cluster-header { grid-template-columns: 96px 1fr; }
+  .cluster-big-num { font-size: 72px; }
+  .cluster-title { font-size: 36px; }
+  .way { grid-template-columns: 72px 1fr; }
+  .way-num { font-size: 36px; }
+  .way-title { font-size: 15px; }
+  .way-content { padding: 20px 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="cell cell-title">
+    <div class="eyebrow">Designer's Field Guide &nbsp;·&nbsp; April 2026</div>
+    <h1>How to Work<br>With <span>AI</span><br>Design Tools</h1>
+  </div>
+  <div class="cell cell-dot-1 dots-black"></div>
+  <div class="cell cell-num">
+    <div class="big-n">46</div>
+    <div class="big-n-label">ways · 5 clusters</div>
+  </div>
+  <div class="cell cell-quote">
+    <blockquote>"Design is a plan for arranging elements to accomplish a particular purpose."</blockquote>
+    <cite>Charles &amp; Ray Eames</cite>
+  </div>
+  <div class="cell cell-dot-2 dots-orange"></div>
+  <div class="cell cell-byline">
+    <p>By <a href="https://marieclairedean.substack.com">MC Dean</a></p>
+    <p>Claude Design · Figma Make</p>
+    <p>Stitch · Canva · any AI tool</p>
+    <p><a href="https://github.com/Owl-Listener">Owl-Listener on GitHub</a></p>
+    <p>MIT License</p>
+  </div>
+</header>
+
+<!-- THESIS -->
+<section class="thesis-strip">
+  <div class="thesis-main">
+    <p>The canvas was never the design. Whether you're in Claude Design, Figma Make, Stitch, Canva, or whatever ships next — the conversation happens before anything appears on screen. The design happens in the conversation. Everything after is rendering.</p>
+  </div>
+  <div class="thesis-aside">
+    <p>This field guide works with any AI design tool. Not prompts. Not templates. Ways to work — the moves and disciplines that separate design thinking in conversation from design-shaped output.</p>
+  </div>
+</section>
+
+<!-- EAMES SECTION -->
+<section class="eames-section">
+  <div class="eames-header-row">
+    <div class="eames-tag">
+      <span>Run this first &nbsp;·&nbsp; Five questions in the Eames tradition</span>
+    </div>
+    <div class="eames-head-text">
+      <h2>Five Questions. Ten Minutes.</h2>
+      <p>Answer these before you open any design tool. The thinking that happens here is the design.</p>
+    </div>
+  </div>
+  <div class="eames-cards">
+    <div class="eames-card ec1">
+      <div class="card-swatch"></div>
+      <div class="eames-card-inner">
+        <span class="card-num">01</span>
+        <div>
+          <div class="card-q">What is the purpose?</div>
+          <div class="card-desc">Not "make a dashboard." What specific outcome does this achieve? For whom? In what moment of their day?</div>
+        </div>
+      </div>
+    </div>
+    <div class="eames-card ec2">
+      <div class="card-swatch"></div>
+      <div class="eames-card-inner">
+        <span class="card-num">02</span>
+        <div>
+          <div class="card-q">Who, exactly?</div>
+          <div class="card-desc">Name a real person. Not "users." The person implies the aesthetic. The aesthetic does not imply the person.</div>
+        </div>
+      </div>
+    </div>
+    <div class="eames-card ec3">
+      <div class="card-swatch"></div>
+      <div class="eames-card-inner">
+        <span class="card-num">03</span>
+        <div>
+          <div class="card-q">What are you working within?</div>
+          <div class="card-desc">Constraints are not obstacles. They are the shape of the solution.</div>
+        </div>
+      </div>
+    </div>
+    <div class="eames-card ec4">
+      <div class="card-swatch"></div>
+      <div class="eames-card-inner">
+        <span class="card-num">04</span>
+        <div>
+          <div class="card-q">What is the one thing?</div>
+          <div class="card-desc">Three seconds. One thing to understand, feel, or do. Not three. One.</div>
+        </div>
+      </div>
+    </div>
+    <div class="eames-card ec5">
+      <div class="card-swatch"></div>
+      <div class="eames-card-inner">
+        <span class="card-num">05</span>
+        <div>
+          <div class="card-q">How will you know it worked?</div>
+          <div class="card-desc">Not "it looks good." What changes in behaviour, decision, or understanding?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav-bar" role="navigation" aria-label="Filter by cluster">
+  <span class="nav-label">Filter</span>
+  <button class="nav-btn active" onclick="showAll(this)">All 46</button>
+  <button class="nav-btn" onclick="showCluster('before', this)">Before You Start</button>
+  <button class="nav-btn" onclick="showCluster('intent', this)">Prompting</button>
+  <button class="nav-btn" onclick="showCluster('iterating', this)">Iterating</button>
+  <button class="nav-btn" onclick="showCluster('critique', this)">Critique</button>
+  <button class="nav-btn" onclick="showCluster('handoff', this)">Handoff</button>
+</nav>
+
+<!-- CLUSTERS -->
+<div class="clusters-wrap">
+
+  <div class="cluster c1 visible" id="cluster-before">
+    <div class="cluster-header">
+      <div class="cluster-color-block"><span class="cluster-big-num">1</span></div>
+      <div class="cluster-head-text">
+        <div class="cluster-label">Cluster 01 · 8 ways</div>
+        <div class="cluster-title">Before You Start</div>
+        <div class="cluster-desc">The design happens here. Before you open anything.</div>
+      </div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">01</span></div><div class="way-content"><div class="way-title">Answer "what is this for?" before you describe what it looks like.</div><div class="way-body">Purpose precedes form. Every time. If you can't say it in one sentence, you're not ready to design.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">02</span></div><div class="way-content"><div class="way-title">Name a real person before you name a colour.</div><div class="way-body">"A CFO who makes decisions in the margins of other meetings" is more useful than "professional, clean, corporate." The person implies the aesthetic. The aesthetic does not imply the person.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">03</span></div><div class="way-content"><div class="way-title">Write down your constraints before your preferences.</div><div class="way-body">Brand system, technical environment, time, approvals. State these first. They are not limiting, they are generative. They're what makes this solution different from every other solution.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">04</span></div><div class="way-content"><div class="way-title">Separate what you know from what you're assuming.</div><div class="way-body">Before you prompt, list three things you know about this user and three things you're assuming. The assumptions are where the design will go wrong.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">05</span></div><div class="way-content"><div class="way-title">Define success in human behaviour, not aesthetics.</div><div class="way-body">"The user understands the hierarchy immediately" is a success criterion. "It looks clean" is not.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">06</span></div><div class="way-content"><div class="way-title">Ask: who is NOT the audience?</div><div class="way-body">Exclusion sharpens intent. A tool designed for everyone is designed for no one. Naming who this is not for clarifies what it does not need to be.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">07</span></div><div class="way-content"><div class="way-title">Read your brand guide before your first prompt, not after.</div><div class="way-body">AI will apply your brand faithfully and incorrectly if you brief it from memory. Know what you're actually asking it to apply.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">08</span></div><div class="way-content"><div class="way-title">Run the five questions.</div><div class="way-body">Purpose, person, constraints, one thing, success measure. Five questions in the Eames tradition. Ten minutes. See above.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="cluster c2 visible" id="cluster-intent">
+    <div class="cluster-header">
+      <div class="cluster-color-block"><span class="cluster-big-num">2</span></div>
+      <div class="cluster-head-text">
+        <div class="cluster-label">Cluster 02 · 13 ways</div>
+        <div class="cluster-title">Prompting for Intent</div>
+        <div class="cluster-desc">You have the intent. Here's how to get it out of your head and into language precise enough to produce something real.</div>
+      </div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">09</span></div><div class="way-content"><div class="way-title">Lead with purpose, not description.</div><div class="way-body">"This needs to help a CFO make a fast decision under time pressure" is better than "make a clean executive dashboard." Purpose tells the AI what to optimise for. Description tells it what to copy.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">10</span></div><div class="way-content"><div class="way-title">Give context about the moment of use.</div><div class="way-body">"Someone reading this on their phone between meetings" changes the design. "Someone presenting this in a boardroom" changes it differently. The moment of use is design information.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">11</span></div><div class="way-content"><div class="way-title">Specify what the user needs to understand, feel, or do — not what they need to see.</div><div class="way-body">Outcome before output. "They need to leave knowing what action to take" is more useful than "it should have a clear call to action."</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">12</span></div><div class="way-content"><div class="way-title">Include what you're NOT trying to do.</div><div class="way-body">Negative space in your brief is as important as positive. "This should not feel like a sales document" removes a whole category of wrong answers before you've seen a single output.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">13</span></div><div class="way-content"><div class="way-title">State your constraints as facts, not apologies.</div><div class="way-body">"This needs to work in our existing blue and white system" not "sorry but we need to use our brand colours." Constraints are design information. Apologising for them obscures that.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">14</span></div><div class="way-content"><div class="way-title">Give the AI a role.</div><div class="way-body">"Approach this as a UX designer who has read the user research" produces different work than "approach this as a graphic designer." The role implies a hierarchy of values.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">15</span></div><div class="way-content"><div class="way-title">Reference qualities, not styles.</div><div class="way-body">"The clarity of a well-designed government service, the warmth of a trusted healthcare brand, but neither's visual language" tells the AI what qualities you want, not what to copy.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">16</span></div><div class="way-content"><div class="way-title">Specify the emotional register.</div><div class="way-body">"Confident but not aggressive." "Approachable but authoritative." Designers have always specified emotional register. Now you do it in language rather than on a moodboard.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">17</span></div><div class="way-content"><div class="way-title">Tell the AI what you know about your user's expertise level.</div><div class="way-body">A design for experts can assume vocabulary, compress hierarchy, and skip explanation. A design for newcomers cannot. This changes almost everything about the output.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">18</span></div><div class="way-content"><div class="way-title">Give the AI your failure mode.</div><div class="way-body">"The last version looked beautiful but nobody understood the hierarchy" is gold. Failure modes tell the tool what success actually requires. Use them.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">19</span></div><div class="way-content"><div class="way-title">Include the business context.</div><div class="way-body">Who commissioned this. What is at stake. What the approval process looks like. These constraints shape good design as much as brand guidelines do.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">20</span></div><div class="way-content"><div class="way-title">Prompt for multiple directions before you commit to one.</div><div class="way-body">Ask the AI to generate three distinct directions before you iterate on any of them. Premature commitment is the most common mistake in AI-assisted design.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">21</span></div><div class="way-content"><div class="way-title">Ask for the reasoning behind the first version.</div><div class="way-body">Before you react to what the AI generated, ask why it made the choices it made. You'll often discover that what you thought you wanted is not what you actually need.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="cluster c3 visible" id="cluster-iterating">
+    <div class="cluster-header">
+      <div class="cluster-color-block"><span class="cluster-big-num">3</span></div>
+      <div class="cluster-head-text">
+        <div class="cluster-label">Cluster 03 · 10 ways</div>
+        <div class="cluster-title">Iterating Through Conversation</div>
+        <div class="cluster-desc">How to refine without losing ground. How to know when you're done.</div>
+      </div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">22</span></div><div class="way-content"><div class="way-title">Separate "I don't understand it" from "I don't like it."</div><div class="way-body">Not understanding is a clarity problem. Not liking it is a values or taste problem. Know which one you have before you prompt again.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">23</span></div><div class="way-content"><div class="way-title">When something works, name it explicitly before you ask for changes.</div><div class="way-body">"Keep the hierarchy in the header section exactly as it is." What you don't protect, you lose.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">24</span></div><div class="way-content"><div class="way-title">Be specific about what is wrong.</div><div class="way-body">"The hierarchy feels off" is less useful than "the user's eye goes to the data table before the decision prompt, and it needs to be the other way around."</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">25</span></div><div class="way-content"><div class="way-title">Don't start over when you can redirect.</div><div class="way-body">"Keep the structure, change the emotional register" preserves what is working. Starting over resets everything, including the things that were right.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">26</span></div><div class="way-content"><div class="way-title">Use the tool's custom controls as vocabulary.</div><div class="way-body">The sliders and controls your AI tool generates show you which parameters it understands. Use them to understand your own brief better.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">27</span></div><div class="way-content"><div class="way-title">Ask the AI to explain its decisions before you critique them.</div><div class="way-body">"Walk me through why you made these layout choices" surfaces assumptions the AI made that you didn't intend.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">28</span></div><div class="way-content"><div class="way-title">When you're stuck, change the constraint rather than the aesthetic.</div><div class="way-body">If you've been iterating on how something looks without progress, you probably have a constraint problem, not an aesthetic problem. Go back to the brief.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">29</span></div><div class="way-content"><div class="way-title">Restate the original purpose periodically.</div><div class="way-body">Drift is real in long design conversations. Every five or six exchanges, restate the one-sentence purpose. It recalibrates both you and the AI.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">30</span></div><div class="way-content"><div class="way-title">Treat unexpected outputs as data.</div><div class="way-body">If the AI went somewhere surprising, ask why before you dismiss it. Unexpected directions often reveal that your brief was ambiguous, which is useful to know.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">31</span></div><div class="way-content"><div class="way-title">Know when to stop iterating.</div><div class="way-body">Conversation without commitment is not design. When the output is good enough to test, test it. Perfection through iteration is a trap.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="cluster c4 visible" id="cluster-critique">
+    <div class="cluster-header">
+      <div class="cluster-color-block dots-black"><span class="cluster-big-num">4</span></div>
+      <div class="cluster-head-text">
+        <div class="cluster-label">Cluster 04 · 8 ways</div>
+        <div class="cluster-title">Critique and Evaluation</div>
+        <div class="cluster-desc">You've seen the output. Now look at it like a designer.</div>
+      </div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">32</span></div><div class="way-content"><div class="way-title">Evaluate against purpose first, aesthetics second.</div><div class="way-body">Does this accomplish what it needs to accomplish? Aesthetics serve purpose. They don't replace it.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">33</span></div><div class="way-content"><div class="way-title">Ask: would the real user understand this in three seconds?</div><div class="way-body">Not a designer. Not your team. The person you named at the beginning. In the moment of use you described. Three seconds.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">34</span></div><div class="way-content"><div class="way-title">Test the hierarchy before the colour.</div><div class="way-body">Does the eye go where it needs to go? Hierarchy is the structure of meaning. Colour is its decoration.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">35</span></div><div class="way-content"><div class="way-title">Ask the AI to critique its own output against your stated intent.</div><div class="way-body">"Given the brief I gave you, what are the weakest aspects of what you produced?" It surfaces gaps you missed and keeps you honest about whether you briefed it well.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">36</span></div><div class="way-content"><div class="way-title">Bring a second voice in before you export.</div><div class="way-body">Ask a colleague what they think the design is trying to do, without telling them. If their answer matches yours, the intent is landing.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">37</span></div><div class="way-content"><div class="way-title">Check that brand application is correct, not just present.</div><div class="way-body">AI will apply your brand faithfully and wrong. "On brand" and "correctly applying the brand" are not the same thing.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">38</span></div><div class="way-content"><div class="way-title">Evaluate for what is missing, not just what is there.</div><div class="way-body">What did you ask for that didn't appear? What assumption did the AI make that you didn't intend? Absence is as meaningful as presence.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">39</span></div><div class="way-content"><div class="way-title">Ask: does this solve the problem, or does it look like it solves the problem?</div><div class="way-body">One holds up in user testing. One holds up in approval meetings. Know which one you have.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="cluster c5 visible" id="cluster-handoff">
+    <div class="cluster-header">
+      <div class="cluster-color-block"><span class="cluster-big-num">5</span></div>
+      <div class="cluster-head-text">
+        <div class="cluster-label">Cluster 05 · 7 ways</div>
+        <div class="cluster-title">Handoff and Output</div>
+        <div class="cluster-desc">The design intent needs to travel. Here's how to make sure it does.</div>
+      </div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">40</span></div><div class="way-content"><div class="way-title">Document the design intent before you export.</div><div class="way-body">Not what it looks like. Why it is that way. The decisions, the trade-offs, the constraints that shaped them. This is the information that travels with the work.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">41</span></div><div class="way-content"><div class="way-title">Export for collaboration, not just for editing.</div><div class="way-body">Canva, Figma, wherever your team works — that's where the design becomes a team object. Bring the intent documentation with it. A design without its rationale is a picture.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">42</span></div><div class="way-content"><div class="way-title">When handing off to a developer or build tool, include the design rationale, not just the spec.</div><div class="way-body">"This spacing creates visual breathing room for a user processing complex information" is more useful to an engineer than "padding: 32px." Rationale survives implementation. Spec often does not.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">43</span></div><div class="way-content"><div class="way-title">Keep the conversation thread.</div><div class="way-body">It is the design history. The decisions made, the directions rejected, the constraints that shaped the outcome. It is more valuable than the export.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">44</span></div><div class="way-content"><div class="way-title">Note which decisions were intentional and which were the AI's defaults.</div><div class="way-body">Defaults are not decisions. They may be right, but you should know the difference.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">45</span></div><div class="way-content"><div class="way-title">Brief the human who continues this work on the intent, not the output.</div><div class="way-body">"Here is what it is trying to do, for whom, in what moment, and how we will know it worked" is a brief. Give the brief.</div></div></li>
+      <li class="way" onclick="this.classList.toggle('open')"><div class="way-num-col"><span class="way-num">46</span></div><div class="way-content"><div class="way-title">Archive the prompts that produced good work.</div><div class="way-body">A prompt that produced excellent output is a reusable design asset. Treat it like one. Your prompt library is your methodology made portable.</div></div></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-cell-main">
+    <p>Built by <a href="https://marieclairedean.substack.com">MC Dean</a> · Designer, philosopher of AI.<br>
+    Part of an open-source series · <a href="https://github.com/Owl-Listener">github.com/Owl-Listener</a></p>
+  </div>
+  <div class="footer-cell-dots dots-pink"></div>
+  <div class="footer-cell-mit"><span>MIT License</span></div>
+</footer>
+
+<script>
+function showAll(btn) {
+  document.querySelectorAll('.cluster').forEach(c => c.classList.add('visible'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function showCluster(id, btn) {
+  document.querySelectorAll('.cluster').forEach(c => c.classList.remove('visible'));
+  document.getElementById('cluster-' + id).classList.add('visible');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
