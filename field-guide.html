@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Work With Claude Design — A Designer's Field Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --ink: #0f0f0f;
+    --paper: #f5f2ec;
+    --accent: #c4440a;
+    --muted: #8a8478;
+    --rule: #d9d4c8;
+    --cluster-1: #1a3a2a;
+    --cluster-2: #1a1a3a;
+    --cluster-3: #3a1a1a;
+    --cluster-4: #2a2a1a;
+    --cluster-5: #1a2a3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    padding: 80px 0 60px;
+    max-width: 860px;
+    margin: 0 auto;
+    padding-left: 48px;
+    padding-right: 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    max-width: 680px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .byline {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .byline a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .byline span { color: var(--rule); }
+
+  /* THESIS */
+  .thesis {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thesis p {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(18px, 2.5vw, 24px);
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 640px;
+  }
+
+  .thesis p + p {
+    margin-top: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+  }
+
+  /* EAMES TEST */
+  .eames {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .eames h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+
+  .eames-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .eames-item {
+    background: var(--paper);
+    padding: 28px;
+    position: relative;
+  }
+
+  .eames-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .eames-q {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .eames-desc {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* NAVIGATION */
+  .nav {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* CLUSTERS */
+  .clusters {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 48px 120px;
+  }
+
+  .cluster {
+    margin-top: 64px;
+    display: none;
+  }
+
+  .cluster.visible {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cluster-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .cluster-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .cluster-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    line-height: 1;
+  }
+
+  .cluster-desc {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 420px;
+    text-align: right;
+    font-style: italic;
+  }
+
+  .ways-list {
+    list-style: none;
+  }
+
+  .way {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 24px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .way:last-child { border-bottom: none; }
+
+  .way:hover .way-body {
+    color: var(--accent);
+  }
+
+  .way-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .way-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    transition: color 0.15s;
+  }
+
+  .way-body {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .way.expanded .way-body {
+    max-height: 200px;
+    opacity: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 48px;
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 24px;
+  }
+
+  footer p {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .mit {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    header, .thesis, .eames, .nav, .clusters { padding-left: 24px; padding-right: 24px; }
+    .cluster-header { grid-template-columns: 1fr; }
+    .cluster-desc { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Designer's Field Guide · Claude Design · April 2026</div>
+  <h1>How to Work With<br><em>Claude Design</em></h1>
+  <div class="byline">
+    <span>By <a href="https://marieclairedean.substack.com">MC Dean</a></span>
+    <span>·</span>
+    <span>46 ways across 5 clusters</span>
+    <span>·</span>
+    <span class="mit">MIT License</span>
+  </div>
+</header>
+
+<div class="thesis">
+  <p>The canvas was never the design. Charles and Ray Eames knew this. Design is a plan for arranging elements to accomplish a purpose — not a rendering, not a deliverable, not a file.</p>
+  <p>Claude Design launched April 17, 2026. You talk to it. It designs. Which means the design happens in the conversation. Everything after is rendering. This is the field guide that didn't exist yet.</p>
+</div>
+
+<div class="eames">
+  <div class="section-label">Run this first</div>
+  <h2>The Eames Test</h2>
+  <div class="eames-grid">
+    <div class="eames-item">
+      <div class="eames-num">01</div>
+      <div class="eames-q">What is the purpose?</div>
+      <div class="eames-desc">Not "make a dashboard." What specific outcome does this achieve? For whom? In what moment?</div>
+    </div>
+    <div class="eames-item">
+      <div class="eames-num">02</div>
+      <div class="eames-q">Who, exactly?</div>
+      <div class="eames-desc">Name a real person if you can. Not "users." The busier and more specific, the better.</div>
+    </div>
+    <div class="eames-item">
+      <div class="eames-num">03</div>
+      <div class="eames-q">What are you working within?</div>
+      <div class="eames-desc">Brand, time, technology, budget. Constraints are not obstacles — they are the shape of the solution.</div>
+    </div>
+    <div class="eames-item">
+      <div class="eames-num">04</div>
+      <div class="eames-q">What is the one thing?</div>
+      <div class="eames-desc">If someone looked for three seconds, what single thing should they understand, feel, or do?</div>
+    </div>
+    <div class="eames-item">
+      <div class="eames-num">05</div>
+      <div class="eames-q">How will you know it worked?</div>
+      <div class="eames-desc">Not "it looks good." What changes in behaviour, decision, or understanding?</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="nav-btn active" onclick="showAll()">All 46</button>
+  <button class="nav-btn" onclick="showCluster('before')">Before You Start</button>
+  <button class="nav-btn" onclick="showCluster('intent')">Prompting for Intent</button>
+  <button class="nav-btn" onclick="showCluster('iterating')">Iterating</button>
+  <button class="nav-btn" onclick="showCluster('critique')">Critique</button>
+  <button class="nav-btn" onclick="showCluster('handoff')">Handoff</button>
+</div>
+
+<div class="clusters">
+
+  <div class="cluster visible" id="cluster-before">
+    <div class="cluster-header">
+      <div>
+        <div class="cluster-number">Cluster 01 · 8 ways</div>
+        <div class="cluster-title">Before You Start</div>
+      </div>
+      <div class="cluster-desc">The intent-setting moves. The design happens here, before you've opened anything.</div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">01</div>
+        <div>
+          <div class="way-title">Answer "what is this for?" before you describe what it looks like.</div>
+          <div class="way-body">Purpose precedes form. Every time. If you cannot answer this in one sentence, you are not ready to design.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">02</div>
+        <div>
+          <div class="way-title">Name a real person before you name a colour.</div>
+          <div class="way-body">"A CFO who makes decisions in the margins of other meetings" is more useful than "professional, clean, corporate." The person implies the aesthetic. The aesthetic does not imply the person.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">03</div>
+        <div>
+          <div class="way-title">Write down your constraints before your preferences.</div>
+          <div class="way-body">Constraints are the design. Brand system, technical environment, time, approvals. State these first. They are not limiting — they are generative. They are what makes this solution different from every other solution.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">04</div>
+        <div>
+          <div class="way-title">Separate what you know from what you are assuming.</div>
+          <div class="way-body">Before you prompt, list three things you know about this user and three things you are assuming. The assumptions are where the design will go wrong.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">05</div>
+        <div>
+          <div class="way-title">Define success in human behaviour, not aesthetics.</div>
+          <div class="way-body">"The user understands the hierarchy immediately" is a success criterion. "It looks clean" is not. Describe what a successful outcome looks like in terms of what a person does, decides, or understands differently.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">06</div>
+        <div>
+          <div class="way-title">Ask: who is NOT the audience?</div>
+          <div class="way-body">Exclusion sharpens intent. A tool designed for everyone is designed for no one. Naming who this is not for clarifies what it does not need to be.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">07</div>
+        <div>
+          <div class="way-title">Read your brand guide before your first prompt, not after.</div>
+          <div class="way-body">AI will apply your brand faithfully and incorrectly if you brief it from memory. Know what you are actually asking it to apply.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">08</div>
+        <div>
+          <div class="way-title">Run the Eames Test.</div>
+          <div class="way-body">Purpose, person, constraints, one thing, success measure. Five questions. Ten minutes. See above.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="cluster visible" id="cluster-intent">
+    <div class="cluster-header">
+      <div>
+        <div class="cluster-number">Cluster 02 · 13 ways</div>
+        <div class="cluster-title">Prompting for Intent</div>
+      </div>
+      <div class="cluster-desc">How to articulate what you are designing precisely enough to produce useful outputs.</div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">09</div>
+        <div>
+          <div class="way-title">Lead with purpose, not description.</div>
+          <div class="way-body">"This needs to help a CFO make a fast decision under time pressure" is better than "make a clean executive dashboard." Purpose tells Claude what to optimise for. Description tells it what to copy.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">10</div>
+        <div>
+          <div class="way-title">Give context about the moment of use.</div>
+          <div class="way-body">"Someone reading this on their phone between meetings" changes the design. "Someone presenting this in a boardroom to people who haven't seen it before" changes it differently. The moment of use is design information.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">11</div>
+        <div>
+          <div class="way-title">Specify what the user needs to understand, feel, or do — not what they need to see.</div>
+          <div class="way-body">Outcome before output. "They need to leave this knowing what action to take" is more useful than "it should have a clear call to action."</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">12</div>
+        <div>
+          <div class="way-title">Include what you are NOT trying to do.</div>
+          <div class="way-body">Negative space in your brief is as important as positive. "This should not feel like a sales document" removes a whole category of wrong answers.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">13</div>
+        <div>
+          <div class="way-title">State your constraints as facts, not apologies.</div>
+          <div class="way-body">"This needs to work in our existing blue and white system" not "sorry but we need to use our brand colours." Constraints are design information. Apologising for them obscures that.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">14</div>
+        <div>
+          <div class="way-title">Give Claude a role.</div>
+          <div class="way-body">"Approach this as a UX designer who has read the user research" produces different work than "approach this as a graphic designer." The role implies a hierarchy of values.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">15</div>
+        <div>
+          <div class="way-title">Reference real examples for tone, not style.</div>
+          <div class="way-body">"The clarity of GOV.UK, the warmth of Airbnb, but neither's visual language" tells Claude what qualities you want, not what to copy. Quality references outperform style references.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">16</div>
+        <div>
+          <div class="way-title">Specify the emotional register.</div>
+          <div class="way-body">"Confident but not aggressive." "Approachable but authoritative." "Urgent but not panicked." Designers have always specified emotional register. Now you do it in language.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">17</div>
+        <div>
+          <div class="way-title">Tell Claude what you know about your user's expertise level.</div>
+          <div class="way-body">A design for experts can assume vocabulary, compress hierarchy, and skip explanation. A design for newcomers cannot. This changes almost everything about the output.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">18</div>
+        <div>
+          <div class="way-title">Give Claude your failure mode.</div>
+          <div class="way-body">"The last version looked beautiful but nobody understood the hierarchy" is gold. Failure modes tell Claude what success actually requires. Use them.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">19</div>
+        <div>
+          <div class="way-title">Include the business context.</div>
+          <div class="way-body">Who commissioned this. What is at stake. What the approval process looks like. These constraints shape good design as much as brand guidelines do.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">20</div>
+        <div>
+          <div class="way-title">Prompt for multiple directions before you commit.</div>
+          <div class="way-body">Ask Claude to generate three distinct directions before you iterate on any one of them. Premature commitment is the most common mistake in AI-assisted design.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">21</div>
+        <div>
+          <div class="way-title">Ask for the reasoning behind the first version.</div>
+          <div class="way-body">Before you react to what Claude generated, ask why it made the choices it made. You will learn whether your intent landed — and you will often discover that what you thought you wanted is not what you actually need.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="cluster visible" id="cluster-iterating">
+    <div class="cluster-header">
+      <div>
+        <div class="cluster-number">Cluster 03 · 10 ways</div>
+        <div class="cluster-title">Iterating Through Conversation</div>
+      </div>
+      <div class="cluster-desc">How to refine without losing ground. How to know when you are done.</div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">22</div>
+        <div>
+          <div class="way-title">Separate "I don't understand it" from "I don't like it."</div>
+          <div class="way-body">They need different responses. Not understanding is a clarity problem. Not liking it is a values or taste problem. Know which one you have before you prompt again.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">23</div>
+        <div>
+          <div class="way-title">When something works, name it explicitly.</div>
+          <div class="way-body">"Keep the hierarchy in the header section exactly as it is" before you ask for changes. What you do not protect, you lose.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">24</div>
+        <div>
+          <div class="way-title">Be specific about what is wrong.</div>
+          <div class="way-body">"The hierarchy feels off" is less useful than "the user's eye goes to the data table before the decision prompt, and it needs to be the other way around." Specific problems get specific solutions.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">25</div>
+        <div>
+          <div class="way-title">Don't start over when you can redirect.</div>
+          <div class="way-body">"Keep the structure, change the emotional register" preserves what is working. Starting over resets everything, including the things that were right.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">26</div>
+        <div>
+          <div class="way-title">Use Claude's sliders as vocabulary.</div>
+          <div class="way-body">The sliders Claude generates are showing you which parameters it understands about the design. They are the adjustable dimensions. Use them to understand your own brief better.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">27</div>
+        <div>
+          <div class="way-title">Ask Claude to explain its decisions before you critique them.</div>
+          <div class="way-body">"Walk me through why you made these layout choices" reveals whether your intent landed. It also surfaces assumptions Claude made that you did not intend.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">28</div>
+        <div>
+          <div class="way-title">When you are stuck, change the constraint rather than the aesthetic.</div>
+          <div class="way-body">If you have been iterating on how something looks without progress, you probably have a constraint problem, not an aesthetic problem. Go back to the brief.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">29</div>
+        <div>
+          <div class="way-title">Restate the original purpose periodically.</div>
+          <div class="way-body">Drift is real in long design conversations. Every five or six exchanges, restate the one-sentence purpose. It recalibrates both you and Claude.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">30</div>
+        <div>
+          <div class="way-title">Treat unexpected outputs as data.</div>
+          <div class="way-body">If Claude went somewhere surprising, ask why before you dismiss it. Unexpected directions often reveal that your brief was ambiguous — which is useful to know.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">31</div>
+        <div>
+          <div class="way-title">Know when to stop iterating.</div>
+          <div class="way-body">Conversation without commitment is not design. When the output is good enough to test, test it. Perfection through iteration is a trap.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="cluster visible" id="cluster-critique">
+    <div class="cluster-header">
+      <div>
+        <div class="cluster-number">Cluster 04 · 8 ways</div>
+        <div class="cluster-title">Critique and Evaluation</div>
+      </div>
+      <div class="cluster-desc">How to assess what Claude generates against real design criteria.</div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">32</div>
+        <div>
+          <div class="way-title">Evaluate against purpose first, aesthetics second.</div>
+          <div class="way-body">Does this accomplish what it needs to accomplish? That is the only question that matters first. Aesthetics serve purpose — they do not replace it.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">33</div>
+        <div>
+          <div class="way-title">Ask: would the real user understand this in three seconds?</div>
+          <div class="way-body">Not a designer. Not your team. The person you named at the beginning. In the moment of use you described. Three seconds.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">34</div>
+        <div>
+          <div class="way-title">Test the hierarchy before the colour.</div>
+          <div class="way-body">Does the eye go where it needs to go? Does the most important thing read as most important? Hierarchy is the structure of meaning. Colour is its decoration.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">35</div>
+        <div>
+          <div class="way-title">Ask Claude to critique its own output against your stated intent.</div>
+          <div class="way-body">"Given the brief I gave you, what are the weakest aspects of what you produced?" It will surface gaps you missed. It also keeps you honest about whether you briefed it well.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">36</div>
+        <div>
+          <div class="way-title">Bring a second voice in before you export.</div>
+          <div class="way-body">Share your conversation with a colleague and ask them what they think the design is trying to do — without telling them. If their answer matches yours, the intent is landing.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">37</div>
+        <div>
+          <div class="way-title">Check that brand application is correct, not just present.</div>
+          <div class="way-body">AI will apply your brand faithfully and wrong. Check typography hierarchy, colour usage, spacing system. "On brand" and "correctly applying the brand" are not the same thing.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">38</div>
+        <div>
+          <div class="way-title">Evaluate for what is missing, not just what is there.</div>
+          <div class="way-body">What did you ask for that did not appear? What assumption did Claude make that you did not intend? Absence is as meaningful as presence in design critique.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">39</div>
+        <div>
+          <div class="way-title">Ask: does this solve the problem, or does it look like it solves the problem?</div>
+          <div class="way-body">One holds up in user testing. One holds up in approval meetings. Know which one you have.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="cluster visible" id="cluster-handoff">
+    <div class="cluster-header">
+      <div>
+        <div class="cluster-number">Cluster 05 · 7 ways</div>
+        <div class="cluster-title">Handoff and Output</div>
+      </div>
+      <div class="cluster-desc">Moving to Canva, Claude Code, or a human team without losing what the design knows.</div>
+    </div>
+    <ul class="ways-list">
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">40</div>
+        <div>
+          <div class="way-title">Document the design intent before you export.</div>
+          <div class="way-body">Not what it looks like. Why it is that way. The decisions, the trade-offs, the constraints that shaped them. This is the information that travels with the work.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">41</div>
+        <div>
+          <div class="way-title">Export to Canva for collaboration, not just for editing.</div>
+          <div class="way-body">Canva is where the design becomes a team object. Bring the intent documentation with it. A design without its rationale is a picture.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">42</div>
+        <div>
+          <div class="way-title">When handing to Claude Code, include the design rationale, not just the spec.</div>
+          <div class="way-body">"This spacing creates visual breathing room for a user processing complex information" is more useful to an engineer than "padding: 32px." Rationale survives implementation. Spec often does not.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">43</div>
+        <div>
+          <div class="way-title">Keep the conversation thread.</div>
+          <div class="way-body">It is the design history. The decisions made, the directions rejected, the constraints that shaped the outcome. It is more valuable than the export.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">44</div>
+        <div>
+          <div class="way-title">Note which decisions were intentional and which were Claude's defaults.</div>
+          <div class="way-body">You want to know which aspects of the design were chosen and which were accepted. Defaults are not decisions. They may be right — but you should know the difference.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">45</div>
+        <div>
+          <div class="way-title">Brief the human who continues this work on the intent, not the output.</div>
+          <div class="way-body">"Here is what it looks like" is a handoff. "Here is what it is trying to do, for whom, in what moment, and how we will know it worked" is a brief. Give the brief.</div>
+        </div>
+      </li>
+      <li class="way" onclick="toggle(this)">
+        <div class="way-num">46</div>
+        <div>
+          <div class="way-title">Archive the prompts that produced good work.</div>
+          <div class="way-body">A prompt that produced excellent output is a reusable design asset. Treat it like one. Your prompt library is your methodology made portable.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <p>Built by <a href="https://marieclairedean.substack.com">MC Dean</a> · <a href="https://github.com/Owl-Listener">github.com/Owl-Listener</a></p>
+  <span class="mit">MIT License · Contributions welcome</span>
+</footer>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('expanded');
+  }
+
+  function showAll() {
+    document.querySelectorAll('.cluster').forEach(c => c.classList.add('visible'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.nav-btn').classList.add('active');
+  }
+
+  function showCluster(id) {
+    document.querySelectorAll('.cluster').forEach(c => c.classList.remove('visible'));
+    document.getElementById('cluster-' + id).classList.add('visible');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
