@@ -146,7 +146,7 @@ The Eames spent their careers designing at the level of intent. Purpose, person,
 
 ## About
 
-Built by [MC Dean](https://marieclairedean.substack.com). Senior designer, philosopher of AI. I write about the intersection of design and AI at MC Dean Percolates on Substack.
+Built by [MC Dean](https://marieclairedean.substack.com). designer, philosopher of AI. I write about the intersection of design and AI at MC Dean Percolates on Substack.
 
 This repo is part of ongoing work on what it means to design well in a world where the execution layer is increasingly automated. The interesting work is in what you bring to the conversation before the tool generates anything.
 
